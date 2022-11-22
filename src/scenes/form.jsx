@@ -45,7 +45,7 @@ const Form = () => {
                                 onChange={handleChange}
                                 value={values.FirstName}
                                 name="FirstName"
-                                error={!!touched.FirstName && !!errors.FirstName}
+                                error={touched.FirstName && errors.FirstName}
                                 helperText={touched.FirstName && errors.FirstName}
                                 sx={{ gridColumn: "span 2" }}
                             />
@@ -58,7 +58,7 @@ const Form = () => {
                                 onChange={handleChange}
                                 value={values.LastName}
                                 name="LastName"
-                                error={!!touched.LastName && !!errors.LastName}
+                                error={touched.LastName && errors.LastName}
                                 helperText={touched.LastName && errors.LastName}
                                 sx={{ gridColumn: "span 2" }}
                             />
@@ -71,7 +71,7 @@ const Form = () => {
                                 onChange={handleChange}
                                 value={values.Email}
                                 name="Email"
-                                error={!!touched.Email && !!errors.Email}
+                                error={touched.Email && errors.Email}
                                 helperText={touched.Email && errors.Email}
                                 sx={{ gridColumn: "span 4" }}
                             />
@@ -84,7 +84,7 @@ const Form = () => {
                                 onChange={handleChange}
                                 value={values.Contact}
                                 name="Contact"
-                                error={!!touched.Contact && !!errors.Contact}
+                                error={touched.Contact && errors.Contact}
                                 helperText={touched.Contact && errors.Contact}
                                 sx={{ gridColumn: "span 4" }}
                             />
@@ -97,7 +97,7 @@ const Form = () => {
                                 onChange={handleChange}
                                 value={values.Address1}
                                 name="Address1"
-                                error={!!touched.Address1 && !!errors.Address1}
+                                error={touched.Address1 && errors.Address1}
                                 helperText={touched.Address1 && errors.Address1}
                                 sx={{ gridColumn: "span 4" }}
                             />
@@ -110,7 +110,7 @@ const Form = () => {
                                 onChange={handleChange}
                                 value={values.Address2}
                                 name="Address2"
-                                error={!!touched.Address2 && !!errors.Address2}
+                                error={touched.Address2 && errors.Address2}
                                 helperText={touched.Address2 && errors.Address2}
                                 sx={{ gridColumn: "span 4" }}
                             />
