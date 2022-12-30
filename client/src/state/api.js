@@ -15,10 +15,6 @@ export const api = createApi({
     "Dashboard",
   ],
   endpoints: (build) => ({
-    getUserByRole: build.query({
-      query: () => `general/user`,
-      providesTags: ["User"],
-    }),
     getUserByEmail: build.query({
     query: (email) => `general/user/${email}`,
     providesTags: ["User"],
@@ -63,7 +59,6 @@ export const api = createApi({
 });
 
 export const {
-  useGetUserByRoleQuery,
   useGetUserByEmailQuery,
   useGetProductsQuery,
   useGetCustomersQuery,

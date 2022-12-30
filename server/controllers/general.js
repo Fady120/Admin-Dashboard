@@ -2,15 +2,6 @@ import User from "../models/User.js";
 import OverallStat from "../models/OverallStat.js";
 import Transaction from "../models/Transaction.js";
 
-export const getUserByRole = async (req, res) => {
-  try {
-    const user = await User.find(({role: "admin"}));
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
 export const getUserByEmail = async (req, res) => {
   try {
     const { email } = req.params;

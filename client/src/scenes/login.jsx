@@ -1,10 +1,10 @@
-import { React, useContext } from 'react';
+import { React, useContext, useState } from 'react';
 import { Grid,Paper, Avatar, TextField, Button, Typography,Link } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {AuthContext} from '../state/AuthContext';
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useGetUserByRoleQuery } from "state/api";  
+import { useGetUserByEmailQuery } from "state/api";
 
 const initialValues = {
   Email:     "",
@@ -12,7 +12,7 @@ const initialValues = {
 };
 
 const userScheme = yup.object().shape({
-  Email: yup.string().email("Invaild email").required("Required"),
+  Email:    yup.string().email("Invaild email").required("Required"),
   Password: yup.string()
             .min(8, 'Password must be 8 characters long')
             .matches(/[0-9]/, 'Password requires a number')
@@ -24,7 +24,23 @@ const userScheme = yup.object().shape({
 
 const Login=(props)=>{
   const authContext = useContext(AuthContext);
-  const { data, isLoading } = useGetUserByRoleQuery();
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState();
+  const { data, isLoading } = useGetUserByEmailQuery(email);
+
+  const Check= () => {
+    let flag = 0;
+    if(password === data[0].password && email === data[0].email) {
+      const id = data[0]._id;
+      localStorage.setItem('email', email);
+      localStorage.setItem('id', id);
+      authContext.setAuth({email, id});
+      flag = 1;
+    }   
+    if(flag === 0) {
+      alert("Email or Password is wrong");
+    }
+  };
   
   return(
     isLoading ? <>Loading..</> :
@@ -34,25 +50,7 @@ const Login=(props)=>{
           <Avatar style={{backgroundColor:'#1bbd7e'}}><LockOutlinedIcon/></Avatar>
           <h2>Sign In</h2>
         </Grid>
-        <Formik initialValues={initialValues}
-                validationSchema={userScheme} 
-                onSubmit={(values) => {
-                  let flag = 0;
-                  for(let i=0;i<data.length;i++) {
-                    if(values.Password === data[i].password && values.Email === data[i].email) {
-                      const id = data[i]._id;
-                      const email = values.Email;
-                      localStorage.setItem('email', email);
-                      localStorage.setItem('id', id);
-                      authContext.setAuth({email, id});
-                      flag = 1;
-                      break;
-                    }   
-                  }
-                  if(flag === 0) {
-                    alert("Email or Password is wrong");
-                  }
-                }}>
+        <Formik initialValues={initialValues} validationSchema={userScheme} onSubmit={Check}>
           {(props) => (
             <form>
               <TextField 
@@ -61,7 +59,7 @@ const Login=(props)=>{
                 label="Email"
                 onBlur={props.handleBlur}
                 onChange={props.handleChange}
-                value={props.values.Email}
+                value={setEmail(props.values.Email)}
                 name="Email"
                 error={props.touched.Email && props.errors.Email}
                 helperText={props.touched.Email && props.errors.Email}
@@ -72,7 +70,7 @@ const Login=(props)=>{
                 label="Password"
                 onBlur={props.handleBlur}
                 onChange={props.handleChange}
-                value={props.values.Password}
+                value={setPassword(props.values.Password)}
                 name="Password"
                 error={props.touched.Password && props.errors.Password}
                 helperText={props.touched.Password && props.errors.Password}
