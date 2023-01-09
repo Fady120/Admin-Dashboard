@@ -25,34 +25,43 @@ const userScheme = yup.object().shape({
 const Login=(props)=>{
   const authContext = useContext(AuthContext);
   const [email,setEmail] = useState('');
-  const [password,setPassword] = useState();
-  const { data, isLoading } = useGetUserByEmailQuery(email);
+  const { data } = useGetUserByEmailQuery(email);
 
-  const Check= () => {
-    let flag = 0;
-    if(password === data[0].password && email === data[0].email) {
+  const login = async (values) => {
+    const loggedInResponse = await fetch(
+      "http://localhost:5001/auth/login", 
+      {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include',
+      body: JSON.stringify({
+        email: values.Email,
+        password: values.Password
+              }
+        ),
+    });
+    // debugger;
+
+    if (loggedInResponse.ok) {
       const id = data[0]._id;
       localStorage.setItem('email', email);
       localStorage.setItem('id', id);
       authContext.setAuth({email, id});
-      flag = 1;
-    }   
-    if(flag === 0) {
-      alert("Email or Password is wrong");
+    } else {
+      alert('Wrong Email or Password');
     }
   };
   
   return(
-    isLoading ? <>Loading..</> :
     <Grid>
       <Paper elevation={10} style={{padding :20,width:500, margin:"90px auto"}}>
         <Grid align='center'>
           <Avatar style={{backgroundColor:'#1bbd7e'}}><LockOutlinedIcon/></Avatar>
           <h2>Sign In</h2>
         </Grid>
-        <Formik initialValues={initialValues} validationSchema={userScheme} onSubmit={Check}>
+        <Formik initialValues={initialValues} validationSchema={userScheme} onSubmit={ async(values) => {await login(values)} }>
           {(props) => (
-            <form>
+            <form onSubmit={props.handleSubmit}>
               <TextField 
                 fullWidth
                 type="text"
@@ -70,12 +79,12 @@ const Login=(props)=>{
                 label="Password"
                 onBlur={props.handleBlur}
                 onChange={props.handleChange}
-                value={setPassword(props.values.Password)}
+                value={props.values.Password}
                 name="Password"
                 error={props.touched.Password && props.errors.Password}
                 helperText={props.touched.Password && props.errors.Password}
                 sx={{ gridColumn: "span 4" }} />
-              <Button type='submit' color='primary' variant="contained" style={{margin:'8px 0'}} fullWidth onClick={props.handleSubmit}>Sign in</Button>
+              <Button type='submit' color='primary' variant="contained" style={{margin:'8px 0'}} fullWidth>Sign in</Button>
             </form>
           )}
         </Formik>

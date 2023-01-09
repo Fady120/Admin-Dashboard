@@ -10,6 +10,7 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import authRoutes from "./routes/auth.js";
 import salesRoutes from "./routes/sales.js";
+import cookieParser from "cookie-parser";
 
 // data imports
 import User from "./models/User.js";
@@ -31,12 +32,21 @@ import {
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+const PORT = process.env.PORT || 9000;
+app.use(
+  cors({
+    origin: [
+      'http://localhost:'+ 3000,
+    ],
+    credentials: true
+  })
+);
 
 /* ROUTES */
 app.use("/client", clientRoutes);
@@ -46,7 +56,6 @@ app.use("/sales", salesRoutes);
 app.use("/auth", authRoutes);
 
 /* MONGOOSE SETUP */
-const PORT = process.env.PORT || 9000;
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

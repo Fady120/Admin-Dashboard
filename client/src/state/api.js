@@ -19,10 +19,6 @@ export const api = createApi({
     query: (email) => `general/user/${email}`,
     providesTags: ["User"],
   }),
-  // register: build.query({
-  //   query: () => "auth/register/",
-  //   providesTags: ["Register"],
-  // }),
     getProducts: build.query({
       query: () => "client/products",
       providesTags: ["Products"],
@@ -64,7 +60,6 @@ export const api = createApi({
 
 export const {
   useGetUserByEmailQuery,
-  // addNewUserQuery,
   useGetProductsQuery,
   useGetCustomersQuery,
   useGetTransactionsQuery,

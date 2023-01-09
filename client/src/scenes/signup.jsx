@@ -37,43 +37,28 @@ const userScheme = yup.object().shape({
 
 const Signup = (props) => {    
     const authContext = useContext(AuthContext);
+    
     const register = async (values) => {
         const savedUserResponse = await fetch(
           "http://localhost:5001/auth/register",
           {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: values.name,
-                email: values.email,
-                password: values.password,
-                city: values.city,
-                state: values.state,
-                country: values.country,
-                occupation: values.occupation,
-                phoneNumber: values.phoneNumber,
-            }),
+            credentials: 'include',
+            body: JSON.stringify(values),
           }
         );
         const savedUser = await savedUserResponse.json();
 
+        console.log(savedUser);
         if (savedUser) {
             let email = values.email;
-            let id = '63701cc1f03239c72c00017f';
+            let id = '63701cc1f03239c72c000181';
             localStorage.setItem('email', email);
             localStorage.setItem('id', id);
             authContext.setAuth({email, id});
         }
       };
-
-    // const addNewUser = (values) => {
-    //     const id = "63701cc1f03239c72c000181";
-    //     const email = "oveneur2@marketwatch.com";
-    //     console.log(values)
-    //     localStorage.setItem('email', email);
-    //     localStorage.setItem('id', id);
-    //     authContext.setAuth({email, id});
-    // };
 
     return (
         <Grid>
